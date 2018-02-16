@@ -1,0 +1,5 @@
+- Ajouter le numero d'équipe en plus du nom d'équipe, c'est plus facile pour les appeler pour nous
+- Ajouter une option pour cocher d'un coup toutes les équipes présentes
+- Comment peut on exporter les données des matchs en excel, c'est peut être déjà fait mais je n'ai pas trouvé
+- La fonction de changement de résultat a des soucis, cela qualifie la mauvaise equipe quand un résultat est changé
+- peut on ajouter une equipe en cours de tournoi ?

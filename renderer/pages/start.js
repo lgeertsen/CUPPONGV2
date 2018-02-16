@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-import TitleBar from '../containers/TitleBar';
+// import TitleBar from '../containers/TitleBar';
 import CupPong from '../containers/CupPong';
 
 export default class App extends React.Component {
@@ -21,7 +21,7 @@ export default class App extends React.Component {
           <script src="../static/jquery.zoomooz.min.js"></script> */}
         </Head>
 
-        <TitleBar/>
+        {/* <TitleBar/> */}
         <div id="containerInner">
           <CupPong/>
         </div>
