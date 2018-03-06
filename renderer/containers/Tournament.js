@@ -48,7 +48,7 @@ export default class Tournament extends React.Component {
             flex: 1 1 auto;
           }
           #overview {
-            overflow: auto;
+            overflow-y: auto;
           }
         `}</style>
       </div>

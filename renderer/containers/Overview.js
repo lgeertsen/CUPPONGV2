@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Round from '../components/Round';
+
 export default class Overview extends React.Component {
   constructor(props) {
     super(props);
@@ -14,46 +16,49 @@ export default class Overview extends React.Component {
   render() {
     return (
       <div id="overview">
-        <div id="gamesContainer">
-          {this.props.tree.map((round, index) => (
-            <div key={index} className="round">
-              {round.map(game => (
-                <div key={game.game} className="game">{game.round + ' ' + game.game}</div>
-              ))}
-            </div>
-          ))}
+        <div className="container">
+            {this.props.tree.map((round, index) => (
+              <div>
+                <Round></Round>
+              </div>
+              // <div key={index} className="row">
+              //   <div className="col-sm-12 card">
+              //     <div className="card-header">
+              //       <h4>Round {index}</h4>
+              //     </div>
+              //
+              //     <div className="card-body">
+              //       dsfq
+              //     </div>
+              //
+              //
+              //     {/* <div className="roundName"> */}
+              //     {/* </div> */}
+              //     {/* <div className="round">
+              //       {round.map(game => (
+              //         <div key={game.game} className="game">
+              //           <h5>Team1</h5>
+              //           <h3>VS</h3>
+              //           <h5>Team2</h5>
+              //         </div>
+              //       ))}
+              //     </div> */}
+              //   </div>
+              // </div>
+            ))}
         </div>
 
+
         <style jsx>{`
-          #overview {
-            /* min-width: 100%; */
-            height: 100%;
-            display: flex;
-            overflow: auto;
-            overflow-y: scroll;
+          div {
+            height: auto;
           }
-          #gamesContainer {
-            /* min-width: 100%; */
-            height: 100%;
-            display: flex;
-            flex-direction: row-reverse;
+          .container {
+            padding-top: 20px;
           }
-          #gamesContainer div {
-            /* height: auto; */
-          }
-          .round {
-            border-bottom: 1px solid #ecf0f1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-          }
-          .game {
-            width: 300px;
-            max-height: 100px;
-            background: #ecf0f1;
-            display: block;
-            margin: 5px;
-            border-radius: 3px;
+          .col-sm-12.card {
+            margin-bottom: 15px;
+            padding: 0;
           }
         `}</style>
       </div>
