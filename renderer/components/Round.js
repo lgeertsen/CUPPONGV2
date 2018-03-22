@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Game from '../components/Game';
+
 export default class Round extends React.Component {
   constructor(props) {
     super(props);
@@ -7,41 +9,51 @@ export default class Round extends React.Component {
 
 
     this.state = {
-
+      expanded: false
     }
   }
 
   render() {
     return (
       <div id="round">
-        <div key={index} className="row">
-          <div className="col-sm-12 card">
-            <div className="card-header">
-              <h4>Round {index}</h4>
+        <div className="row">
+          <div className="col-sm-12 card border-light">
+            <div className="card-header" onClick={() => this.setState({expanded: !this.state.expanded})}>
+              {this.props.roundId == 0 ?
+                <h6>Finale</h6>
+                :
+                <h6>1/{Math.pow(2, this.props.roundId)} Finale</h6>
+              }
             </div>
 
-            <div className="card-body">
-              dsfq
-            </div>
-
-
-            {/* <div className="roundName"> */}
-            {/* </div> */}
-            {/* <div className="round">
-            {round.map(game => (
-            <div key={game.game} className="game">
-            <h5>Team1</h5>
-            <h3>VS</h3>
-            <h5>Team2</h5>
+            {this.state.expanded ?
+              <div className="card-body row">
+                {this.props.round.map((game, index) => (
+                  <Game key={index} game={game}></Game>
+                ))}
               </div>
-            ))}
-          </div> */}
+              :
+              ''
+            }
           </div>
         </div>
 
 
         <style jsx>{`
-
+          .card {
+            padding: 0;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 1px rgba(200,200,200,0.7);
+          }
+          .card-header {
+            cursor: pointer;
+          }
+          .card-header h6 {
+            margin-bottom: 0;
+          }
+          .card-body {
+            padding-bottom: 10px;
+          }
         `}</style>
       </div>
     );

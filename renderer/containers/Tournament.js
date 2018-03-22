@@ -1,5 +1,6 @@
 import React from 'react';
 
+import NowPlaying from '../containers/NowPlaying';
 import Overview from '../containers/Overview';
 
 export default class Tournament extends React.Component {
@@ -23,7 +24,12 @@ export default class Tournament extends React.Component {
           : ''
         }
         {this.props.activeTab == 2 ?
-          <div id="nowPlaying">Now Playing</div>
+          <div id="nowPlaying">
+            <NowPlaying
+              tables={this.props.tables}
+              finishGame={(game, winner) => this.props.finishGame(game, winner)}
+            />
+          </div>
           : ''
         }
         {this.props.activeTab == 3 ?
@@ -48,6 +54,9 @@ export default class Tournament extends React.Component {
             flex: 1 1 auto;
           }
           #overview {
+            overflow-y: auto;
+          }
+          #nowPlaying {
             overflow-y: auto;
           }
         `}</style>

@@ -2,9 +2,15 @@ import React from 'react';
 import electron from 'electron';
 import fs from 'fs';
 
-import TitleBar from '../containers/TitleBar';
+import Game from '../classes/Game';
+import Team from '../classes/Team';
+import TournamentClass from '../classes/TournamentClass';
+
 import Inscription from '../containers/Inscription';
+import TitleBar from '../containers/TitleBar';
 import Tournament from '../containers/Tournament';
+
+var tournament = new TournamentClass();
 
 export default class CupPong extends React.Component {
   constructor(props) {
@@ -19,14 +25,20 @@ export default class CupPong extends React.Component {
       activeTab: 1,
       nbTables: 1,
       teams: [],
-      tree: []
+      tree: [],
+      tables: []
     }
+  }
+
+  reset() {
+    this.setState({started: false, tables: [], tree: []});
+    tournament.reset();
   }
 
   render() {
     return (
       <div id="cupPong">
-        <button id="restart" className="btn btn-link" onClick={() => this.setState({started: false, teams: []})}>R</button>
+        <button id="restart" className="btn btn-link" onClick={() => this.reset()}>R</button>
         <TitleBar
           started={this.state.started}
           activeTab={this.state.activeTab}
@@ -58,6 +70,8 @@ export default class CupPong extends React.Component {
             <Tournament
               activeTab={this.state.activeTab}
               tree={this.state.tree}
+              tables={this.state.tables}
+              finishGame={(game, winner) => this.finishGame(game, winner)}
             />
           }
         </div>
@@ -92,8 +106,13 @@ export default class CupPong extends React.Component {
         }
       }
       if(teams.length > 2) {
+        tournament.teams = teams;
         this.setState({started: true, teams: teams});
         this.makeTree(teams.length-1);
+        this.fillTree();
+
+        tournament.assignTable(this.state.nbTables, (tables) => this.setState({tables: tables}));
+        // this.setState({tables: tables});
       }
     }
   }
@@ -106,9 +125,7 @@ export default class CupPong extends React.Component {
     tree.push([]);
     for(let i = 0; i < length; i++) {
       // var game = new Game();
-      let game = {}
-      game.round = level-1;
-      game.game = count;
+      let game = new Game(level-1, count);
       tree[level-1][count] = game;
 
       count++;
@@ -121,6 +138,44 @@ export default class CupPong extends React.Component {
     }
     console.log(tree);
     this.setState({tree: tree});
+    tournament.tree = tree;
+  }
+
+  fillTree() {
+    let n = tournament.teams.length;
+
+    // if((n & (n - 1)) === 0) {
+      let even = [];
+      let uneven = [];
+      for(let i = 0; i < n; i++) {
+        if(i % 2 == 0) {
+          even.push(tournament.teams[i]);
+        } else {
+          uneven.push(tournament.teams[i]);
+        }
+      }
+
+      even = tournament.shuffle(even);
+      uneven = tournament.shuffle(uneven);
+
+      console.log(even);
+      console.log(uneven);
+
+      let teams = even.concat(uneven);
+
+      tournament.assignTeamsToGame(teams, (tree) => this.setState({tree: tree}));
+
+
+
+    // } else {
+    //
+    // }
+  }
+
+  finishGame(game, winner) {
+    console.log(game);
+    console.log("winner: " + winner);
+    tournament.finishGame(game, winner, (tree, tables) => this.setState({tree: tree, tables: tables}));
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
@@ -219,12 +274,14 @@ export default class CupPong extends React.Component {
           return;
         }
         var obj = JSON.parse(data);
+        var teams = [];
         if(obj[0].edit == undefined) {
           for(var i in obj) {
-            obj[i].edit = false;
+            let team = new Team(obj[i]);
+            teams.push(team);
           }
         }
-        console.log(obj);
+        console.log(teams);
         this.setState({teams: obj});
       });
     });
