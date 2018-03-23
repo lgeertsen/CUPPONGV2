@@ -4,6 +4,7 @@ export default class TournamentClass {
     this._tree = null;
     this._waitingList = [];
     this._tables = [];
+    this._history = [];
   }
 
   get teams() { return this._teams; }
@@ -62,6 +63,25 @@ export default class TournamentClass {
     callback(this._tree);
   }
 
+  assignTeamToGame(team, round) {
+    let assigned = false;
+    let i = 0;
+    while(!assigned) {
+      let game = this._tree[round][i];
+      if(game.team1 == null) {
+        game.team1 = team;
+        assigned = true;
+      } else if(game.team2 == null) {
+        game.team2 = team;
+        game.status = "waiting";
+        this._waitingList.push(game);
+        assigned = true;
+      } else {
+        i++;
+      }
+    }
+  }
+
   assignTable(n, callback) {
     for(let i = 0; i < n; i++) {
       let game = this._waitingList.shift();
@@ -74,7 +94,30 @@ export default class TournamentClass {
   }
 
   finishGame(game, winner, callback) {
+    if(game.round == 0) {
+      // TODO: Finish tournament
+      console.log("Tournament finished");
+    } else {
+      console.log(game.round);
+      console.log(game.game);
+      console.log(this._tree);
+      let g = this._tree[game.round][game.game];
+      g.winner = winner;
+      g.status = "finished";
+      this._history.unshift(g);
+      if(winner == 1) {
+        this.assignTeamToGame(g.team1, g.round-1);
+      } else {
+        this.assignTeamToGame(g.team2, g.round-1);
+      }
 
+      let newGame = this._waitingList.shift();
+      newGame.table = g.table;
+      newGame.status = "playing";
+      this._tables[g.table-1] = newGame;
+
+      callback(this._tree, this._tables, this._history);
+    }
   }
 }
 

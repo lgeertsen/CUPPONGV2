@@ -26,7 +26,8 @@ export default class CupPong extends React.Component {
       nbTables: 1,
       teams: [],
       tree: [],
-      tables: []
+      tables: [],
+      history: []
     }
   }
 
@@ -71,6 +72,7 @@ export default class CupPong extends React.Component {
               activeTab={this.state.activeTab}
               tree={this.state.tree}
               tables={this.state.tables}
+              history={this.state.history}
               finishGame={(game, winner) => this.finishGame(game, winner)}
             />
           }
@@ -118,20 +120,20 @@ export default class CupPong extends React.Component {
   }
 
   makeTree(length) {
-    let level = 1;
+    let level = 0;
     let max = 1;
     let count = 0;
     let tree = [];
     tree.push([]);
     for(let i = 0; i < length; i++) {
       // var game = new Game();
-      let game = new Game(level-1, count);
-      tree[level-1][count] = game;
+      let game = new Game(level, count);
+      tree[level][count] = game;
 
       count++;
       if(count == max && i != length-1) {
         level++;
-        tree[level-1] = [];
+        tree[level] = [];
         max *= 2;
         count = 0;
       }
@@ -173,9 +175,7 @@ export default class CupPong extends React.Component {
   }
 
   finishGame(game, winner) {
-    console.log(game);
-    console.log("winner: " + winner);
-    tournament.finishGame(game, winner, (tree, tables) => this.setState({tree: tree, tables: tables}));
+    tournament.finishGame(game, winner, (tree, tables, history) => this.setState({tree: tree, tables: tables, history: history}));
   }
 
   ///////////////////////////////////////////////////////////////////////////////////

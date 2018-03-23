@@ -20,6 +20,9 @@ export default class Game extends React.Component {
       case "playing":
         c += " border-danger";
         break;
+      case "finished":
+        c += " border-success";
+        break;
     }
     return c;
   }

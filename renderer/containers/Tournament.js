@@ -1,5 +1,6 @@
 import React from 'react';
 
+import History from '../containers/History';
 import NowPlaying from '../containers/NowPlaying';
 import Overview from '../containers/Overview';
 
@@ -33,7 +34,9 @@ export default class Tournament extends React.Component {
           : ''
         }
         {this.props.activeTab == 3 ?
-          <div id="history">History</div>
+          <div id="history">
+            <History history={this.props.history}/>
+          </div>
           : ''
         }
         {this.props.activeTab == 4 ?
@@ -57,6 +60,9 @@ export default class Tournament extends React.Component {
             overflow-y: auto;
           }
           #nowPlaying {
+            overflow-y: auto;
+          }
+          #history {
             overflow-y: auto;
           }
         `}</style>

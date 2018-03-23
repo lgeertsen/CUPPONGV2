@@ -4,6 +4,9 @@ export default class Game {
     this._team2 = null;
     this._table = null;
     this._status = "empty";
+    this._winner = null;
+
+    console.log(round);
 
     this.round = round;
     this.game = game;
@@ -20,4 +23,7 @@ export default class Game {
 
   get status() { return this._status; }
   set status(status) { this._status = status; }
+
+  get winner() { return this._winner; }
+  set winner(winner) { this._winner = winner; }
 }
