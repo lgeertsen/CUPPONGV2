@@ -32,7 +32,31 @@ export default class Game extends React.Component {
       <div id="game" className="col-sm-4">
         <div className={this.getClass()}>
           <div className="card-header bg-transparent" onClick={() => this.setState({expanded: !this.state.expanded})}>
-            <h6>{this.props.game.team1 ? this.props.game.team1.id+1 : '...'} VS {this.props.game.team2 ? this.props.game.team2.id+1 : '...'}</h6>
+            <h6>
+              {this.props.game.team1 ?
+                <span>
+                  {this.props.game.winner ?
+                    <span className={this.props.game.winner == 1 ? 'text-success' : 'text-danger'}>
+                      {this.props.game.team1.id + 1}
+                    </span>
+                  :
+                    this.props.game.team1.id + 1
+                  }
+                </span>
+              : '...'}
+              <span> VS </span>
+              {this.props.game.team2 ?
+                <span>
+                  {this.props.game.winner ?
+                    <span className={this.props.game.winner == 2 ? 'text-success' : 'text-danger'}>
+                      {this.props.game.team2.id + 1}
+                    </span>
+                  :
+                    this.props.game.team2.id + 1
+                  }
+                </span>
+              : '...'}
+            </h6>
           </div>
 
           {this.state.expanded ?

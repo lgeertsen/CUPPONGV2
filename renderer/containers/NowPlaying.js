@@ -20,11 +20,14 @@ export default class NowPlaying extends React.Component {
               <ul className="list-group list-group-flush">
                 {this.props.tables.map((game, index) => (
                   <li key={index} className="list-group-item">
-                    <Table
-                      game={game}
-                      index={index}
-                      finishGame={(game, winner) => this.props.finishGame(game, winner)}
-                    />
+                    {game != null ?
+                      <Table
+                        game={game}
+                        index={index}
+                        finishGame={(game, winner) => this.props.finishGame(game, winner)}
+                      />
+                      : ''
+                    }
                   </li>
                 ))}
               </ul>

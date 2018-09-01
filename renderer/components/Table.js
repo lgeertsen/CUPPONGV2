@@ -14,7 +14,7 @@ export default class Table extends React.Component {
       <div id="table">
         <div className="cupTable">
           <h6>Table</h6>
-          <h2>{this.props.index+1}</h2>
+          <h2>{this.props.game.table}</h2>
           <hr/>
           <h4>1/{Math.pow(2, this.props.game.round)}</h4>
           <h6>Finale</h6>

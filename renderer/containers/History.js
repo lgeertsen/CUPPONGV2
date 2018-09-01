@@ -20,7 +20,15 @@ export default class History extends React.Component {
               <ul className="list-group list-group-flush">
                 {this.props.history.map((game, index) => (
                   <li key={index} className="list-group-item">
-                    <h3>{game.team1.name} VS {game.team2.name}</h3>
+                    <div>
+                      <h3>{game.team1.name}</h3>
+                    </div>
+                    <div>
+                      <h1>VS</h1>
+                    </div>
+                    <div>
+                      <h3>{game.team2.name}</h3>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -30,7 +38,13 @@ export default class History extends React.Component {
         </div>
 
         <style jsx>{`
-          
+          .list-group-item {
+            display: flex;
+            align-items: center;
+          }
+          .list-group-item div {
+            flex-grow: 1;
+          }
         `}</style>
       </div>
     );

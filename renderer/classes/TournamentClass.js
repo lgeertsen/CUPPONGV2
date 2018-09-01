@@ -63,21 +63,36 @@ export default class TournamentClass {
     callback(this._tree);
   }
 
-  assignTeamToGame(team, round) {
+  assignTeamToGame(team, round, ga) {
     let assigned = false;
     let i = 0;
-    while(!assigned) {
-      let game = this._tree[round][i];
-      if(game.team1 == null) {
-        game.team1 = team;
-        assigned = true;
-      } else if(game.team2 == null) {
-        game.team2 = team;
-        game.status = "waiting";
-        this._waitingList.push(game);
+    let g = Math.trunc(ga/2);
+    if(round == this._tree.length-2) {
+      while(!assigned) {
+        let game = this._tree[round][i];
+        if(game.team1 == null) {
+          game.team1 = team;
+          assigned = true;
+        } else if(game.team2 == null) {
+          game.team2 = team;
+          game.status = "waiting";
+          this._waitingList.push(game);
+          assigned = true;
+        } else {
+          i++;
+        }
+      }
+    } else {
+      let match = this._tree[round][g];
+      if(match.team1 == null) {
+        match.team1 = team;
+      } else if(match.tem22 == null) {
+        match.team2 = team;
+        match.status = "waiting";
+        this._waitingList.push(match);
         assigned = true;
       } else {
-        i++;
+        console.error("Can't assign player to new game!!! :O");
       }
     }
   }
@@ -94,28 +109,48 @@ export default class TournamentClass {
   }
 
   finishGame(game, winner, callback) {
+    let g = this._tree[game.round][game.game];
+    g.winner = winner;
+    g.status = "finished";
+    this._history.unshift(g);
+
     if(game.round == 0) {
       // TODO: Finish tournament
       console.log("Tournament finished");
     } else {
-      console.log(game.round);
-      console.log(game.game);
-      console.log(this._tree);
-      let g = this._tree[game.round][game.game];
-      g.winner = winner;
-      g.status = "finished";
-      this._history.unshift(g);
       if(winner == 1) {
-        this.assignTeamToGame(g.team1, g.round-1);
+        this.assignTeamToGame(g.team1, g.round-1, game.game);
       } else {
-        this.assignTeamToGame(g.team2, g.round-1);
+        this.assignTeamToGame(g.team2, g.round-1, game.game);
       }
 
-      let newGame = this._waitingList.shift();
-      newGame.table = g.table;
-      newGame.status = "playing";
-      this._tables[g.table-1] = newGame;
+      for(let i in this._tables) {
+        let t = this._tables[i];
+        if(t.team1 == g.team1 && t.team2 == g.team2) {
+          this._tables[i] = null;
+        }
+      }
 
+      if(this._waitingList.length) {
+        let newGame = this._waitingList.shift();
+        newGame.table = g.table;
+        newGame.status = "playing";
+
+        let assigned = false;
+        let i = 0;
+        while(!assigned) {
+          if(this._tables[i] == null) {
+            this._tables[i] = newGame;
+            assigned = true;
+          }
+          i++;
+        }
+        // this._tables[g.table-1] = newGame;
+      } else {
+        this._tables.splice(g.table-1, 1);
+      }
+
+      console.log(this._tables);
       callback(this._tree, this._tables, this._history);
     }
   }

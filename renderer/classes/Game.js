@@ -6,8 +6,6 @@ export default class Game {
     this._status = "empty";
     this._winner = null;
 
-    console.log(round);
-
     this.round = round;
     this.game = game;
   }
